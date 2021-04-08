@@ -1,0 +1,29 @@
+{
+  "name": "@simonbrunel/vuepress-plugin-versions",
+  "description": "Allows users to switch between different versions of your documentation",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint . --ext .js,.vue"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simonbrunel/vuepress-plugin-versions.git"
+  },
+  "keywords": [
+    "vuepress",
+    "plugin",
+    "versions",
+    "npm"
+  ],
+  "homepage": "https://github.com/simonbrunel/vuepress-plugin-versions#readme",
+  "devDependencies": {
+    "eslint": "^7.23.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-vue": "^7.8.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
