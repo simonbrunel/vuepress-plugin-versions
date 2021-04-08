@@ -1,10 +1,7 @@
+const semiver = require('semiver/dist/semiver');
+
 // https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
 const SEMVER_REGEX = /^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<build>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;
-
-const VERSION_COLLATOR = new Intl.Collator('en', {
-  sensitivity: 'base',
-  numeric: true,
-});
 
 const VERSION_GROUPS= {
   major: /^\d\./,
@@ -31,7 +28,7 @@ function describeVersion({name, tag}) {
 }
 
 function collapseVersions({group}, versions) {
-  const items = [...versions].sort((d0, d1) => -VERSION_COLLATOR.compare(d0.name, d1.name));
+  const items = [...versions].sort((d0, d1) => -semiver(d0.name, d1.name));
   const regex = VERSION_GROUPS[group];
   const groups = {};
 
