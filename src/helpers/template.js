@@ -8,9 +8,11 @@ function resolveTemplate(value, variables, filters) {
   for (const [variable, replacement] of Object.entries(variables)) {
     const regex = new RegExp(`{{\\s*${variable}\\s*(${FILTER_PATTERN})?}}`, 'g');
     value = value.replace(regex, (_, __, filter) => {
-      return filter && filters[filter] ?
+      const res = filter && filters[filter] ?
         filters[filter](replacement, variables) :
         replacement;
+
+      return res === undefined || res === null ? '' : res;
     });
   }
 
