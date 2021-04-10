@@ -15,7 +15,12 @@ function createItemsForVersions(config, versions) {
     versions = versions.filter(({name}) => !name.match(regex));
   }
 
-  return collapseVersions(config, versions).map((version) => {
+  let items = collapseVersions(config, versions);
+  if (config.limit > 0) {
+    items = items.slice(0, config.limit);
+  }
+
+  return items.map((version) => {
     const variables = describeVersion(version);
     const text = resolveTemplate(config.text, variables, filters);
     let link = resolveTemplate(config.link, variables, filters);

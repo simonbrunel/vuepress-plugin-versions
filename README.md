@@ -105,6 +105,7 @@ module.exports = {
             link: '/{{version}}/',
             text: '{{version}}',
             exclude: undefined,
+            limit: undefined,
             group: 'minor',
           },
         ],
@@ -200,8 +201,9 @@ for the default theme.
 
 #### Versions Item
 
-A `'versions'` item can be used to generate multiple items, one for each available version. It's
-possible to control which versions are displayed by changing the `group` and `exclude` options.
+A `'versions'` item can be used to generate multiple items, one for each available version.
+It's possible to control which versions are displayed by changing the `group`, `exclude`
+and `limit` options.
 
 ```js
 {
@@ -229,6 +231,12 @@ possible to control which versions are displayed by changing the `group` and `ex
    * @type 'major' | 'minor' | 'patch' | null
    */
   group: 'minor',
+
+  /**
+   * Number of versions to display, after `exclude` and `group` has been applied.
+   * @type number
+   */
+  limit: undefined,
 
   /**
    * Where to display the linked URL. If undefined, outbound links are opened in a
