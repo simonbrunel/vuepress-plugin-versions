@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import filters from '@dynamic/filters';
 import config from '@dynamic/config';
 import {injectElement} from './helpers/dom';
 import {fetchNpmVersions} from './helpers/registry';
@@ -8,6 +7,8 @@ import {collapseVersions, describeVersion} from './helpers/versions';
 
 // Components
 import VersionsDropdown from './components/VersionsDropdown.vue';
+
+const filters = config.filters || {};
 
 function createItemsForVersions(config, versions) {
   if (config.exclude) {

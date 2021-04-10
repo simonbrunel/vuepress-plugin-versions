@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "node-fetch": "^2.6.1",
-    "semiver": "^1.1.0"
+    "semiver": "^1.1.0",
+    "stringify-object": "^3.3.0"
   }
 }

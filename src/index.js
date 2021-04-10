@@ -1,6 +1,7 @@
 const fs = require('fs');
 const fetch = require('node-fetch');
 const {resolve} = require('path');
+const stringify = require('stringify-object');
 const {fetchNpmVersions} = require('./helpers/registry');
 
 const DEFAULT_OPTIONS = {
@@ -35,9 +36,6 @@ module.exports = (options, context) => {
   }
 
   const packagePath = resolve(root, config.package);
-  const filtersPath = config.filters ?
-    resolve(root, config.filters).replace(/\\/g, '/') :
-    null;
 
   try {
     // https://docs.npmjs.com/cli/v7/configuring-npm/package-json
@@ -66,16 +64,7 @@ module.exports = (options, context) => {
         {
           name: 'config.js',
           content: `
-            module.exports = ${JSON.stringify(config)};
-          `,
-        },
-        {
-          name: 'filters.js',
-          content: filtersPath ? `
-            const filters = require('${filtersPath}');
-            module.exports = filters;
-          ` : `
-            module.exports = {};
+            module.exports = ${stringify(config)};
           `,
         },
       ];

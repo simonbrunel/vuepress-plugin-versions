@@ -60,8 +60,8 @@ module.exports = {
       package: '../../package.json',
 
       /**
-       * Path to the template filters JS module. See "Template Syntax > Filters" for details.
-       * @type string | undefined
+       * Template filters. See "Template Syntax > Filters" for details.
+       * @type object | undefined
        * @default undefined
        */
       filters: undefined,
@@ -215,11 +215,11 @@ and `limit` options.
   type: 'versions',
 
   /**
-   * A string pattern to construct a RegExp used to exclude versions, for example:
-   * - exclude: '^[0]\\.|[1]\\.[0-5]\\.' (ignores version in range 0.x to 1.5)
-   * - exclude: '^[01]\\.' (ignores all 0.x and 1.x versions)
-   * - exclude: 'alpha|beta' (ignores all alpha and beta versions)
-   * @type string (pattern)
+   * Regular expression used to exclude versions, for example:
+   * - exclude: /^[0]\.|[1]\.[0-5]\./ (ignores version in range 0.x to 1.5)
+   * - exclude: /^[01]\./ (ignores all 0.x and 1.x versions)
+   * - exclude: /alpha|beta/ (ignores all alpha and beta versions)
+   * @type regexp
    */
   exclude: undefined,
 
@@ -233,7 +233,7 @@ and `limit` options.
   group: 'minor',
 
   /**
-   * Number of versions to display, after `exclude` and `group` has been applied.
+   * Number of versions to display, after `exclude` and `group` have been applied.
    * @type number
    */
   limit: undefined,
@@ -284,17 +284,18 @@ Currently, the following variables are supported for each version:
 
 Additionally, it's possible to define your own filters that you can use to transform the value of
 these variables (e.g. `{{version|slug}}`, where `slug` is a function that you provide and taking
-the value of `version` as first parameter).
+the value of `version` as first argument).
 
 #### Filters
 
 Filters allow to modify the value of a template variable. There is currently no built-in filters
-but you can provide your own in a separate JavaScript file. This file must export an object where
-the key is the filter name and the value, a function that takes two args: the variable value to
+but you can provide your own using the `filters` plugin option. It must be an object where the key
+is the filter name and the value, a function that takes two arguments: the variable value to
 transform and an object containing all available variables.
 
-**Important:** if you provide your own filters, you **must** set the `filters` plugin option with
-the path to your filters file, relative to the `.vuepress` folder.
+**Important:** Since filters are serialized in order to be used on the client side, they **must**
+be [arrow function expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+and can **not** use global variables or functions.
 
 For example:
 
@@ -302,23 +303,13 @@ For example:
 module.exports = {
   plugins: [
     ['@simonbrunel/vuepress-plugin-versions', {
-      filters: 'versions-filters.js',
-      // ...
+      filters: {
+        slug: (v) => v.replace(/\./g, '_'),
+        suffix: (v) => v ? ` (${v})` : '',
+      }
     }]
   ]
 }
-```
-
-```js
-// .vuepress/versions-filters.js
-export default {
-  slug(value) {
-    return value.replace(/\./g, '_');
-  },
-  suffix(value) {
-    return value ? ` (${value})` : '';
-  },
-};
 ```
 
 With the previous configuration, the following templates are resolved as:
