@@ -146,8 +146,12 @@ for the default theme.
 ```js
 {
   /**
-   * URL (or path) to open on click. This value supports variables for the current
-   * version (i.e. package.json/version). See "Template Syntax" for details.
+   * Link URL. If it's a path, it will be resolved relative to the site origin (i.e.
+   * will not have `base` prepended to it), thus it must start and end with a slash.
+   * For example, if your documentation is deployed at `https://foo.com/docs/1.2.3/`
+   * with `base: '/docs/1.2.3/`, then `link: '/docs/{{version}}/'` will be resolved
+   * as `https://foo.com/docs/{{version}}/`. This value supports variables for the
+   * version for which this item is created. See "Template Syntax" for details.
    * @type string (template)
    * @required
    */
@@ -247,8 +251,12 @@ and `limit` options.
   target: undefined,
 
   /**
-   * URL (or path) to open on click. This value supports variables for the version
-   * for which this item is created. See "Template Syntax" for details.
+   * Link URL. If it's a path, it will be resolved relative to the site origin (i.e.
+   * will not have `base` prepended to it), thus it must start and end with a slash.
+   * For example, if your documentation is deployed at `https://foo.com/docs/1.2.3/`
+   * with `base: '/docs/1.2.3/`, then `link: '/docs/{{version}}/'` will be resolved
+   * as `https://foo.com/docs/{{version}}/`. This value supports variables for the
+   * version for which this item is created. See "Template Syntax" for details.
    * @type string (template)
    */
   link: '/{{version}}/',

@@ -10,28 +10,40 @@ import VersionsDropdown from './components/VersionsDropdown.vue';
 
 const filters = config.filters || {};
 
-function createItemsForVersions(config, versions) {
-  if (config.exclude) {
-    const regex = new RegExp(config.exclude);
+function resolveLink(template, variables, filters) {
+  let link = resolveTemplate(template, variables, filters);
+
+  // Paths are resolved by the router relative to `base`. But since `base` points to
+  // the docs root (i.e. a specific version), the version is already part of `base`.
+  // So we need to resolve it relative to origin before passing it to the router.
+  // https://github.com/chartjs/Chart.js/issues/8880
+  if (link.startsWith('/')) {
+    link = `${window.location.origin}${link}`;
+  }
+
+  // Make the current link relative to base so the router can mark it as active.
+  const prefix = `${window.location.origin}${config.base}`;
+  return link.startsWith(prefix) ?
+    link.substring(prefix.length) + '/' :
+    link;
+}
+
+function createItemsForVersions(options, versions) {
+  if (options.exclude) {
+    const regex = new RegExp(options.exclude);
     versions = versions.filter(({name}) => !name.match(regex));
   }
 
-  let items = collapseVersions(config, versions);
-  if (config.limit > 0) {
-    items = items.slice(0, config.limit);
+  let items = collapseVersions(options, versions);
+  if (options.limit > 0) {
+    items = items.slice(0, options.limit);
   }
 
   return items.map((version) => {
+    const {target} = options;
     const variables = describeVersion(version);
-    const text = resolveTemplate(config.text, variables, filters);
-    let link = resolveTemplate(config.link, variables, filters);
-    const {target} = config;
-
-    // Make the link relative to the current URL so the router will
-    // be able to detect if the link is the current docs version.
-    if (link.startsWith(origin)) {
-      link = link.substring(origin.length);
-    }
+    const text = resolveTemplate(options.text, variables, filters);
+    const link = resolveLink(options.link, variables, filters);
 
     return {
       target,
@@ -71,7 +83,7 @@ function resolveItems(items, versions, version) {
         results.push({
           ...item,
           text: text,
-          link: resolveTemplate(
+          link: resolveLink(
               item.link || '',
               variables,
               filters,

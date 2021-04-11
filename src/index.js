@@ -21,11 +21,12 @@ const DEFAULT_OPTIONS = {
   },
 };
 
-module.exports = (options, context) => {
-  const root = resolve(context.sourceDir, '.vuepress');
+module.exports = (options, {base, sourceDir}) => {
+  const root = resolve(sourceDir, '.vuepress');
   const config = {
     ...DEFAULT_OPTIONS,
     ...options,
+    base,
   };
 
   if (config.menu) {
