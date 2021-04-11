@@ -1,7 +1,7 @@
 {
   "name": "@simonbrunel/vuepress-plugin-versions",
   "description": "Allows users to switch between different versions of your documentation",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "main": "src/index.js",
   "files": [
